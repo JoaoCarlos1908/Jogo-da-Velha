@@ -17,6 +17,12 @@ public class MainActivity extends AppCompatActivity {
     private Button[] btn = new Button[10];
     private TextView text_jogador;
     private Boolean jogador = true;//true = X ; false = O
+    int[][] combinacoes = {
+            {1, 2, 3}, {4, 5, 6}, {7, 8, 9}, // linhas
+            {1, 4, 7}, {2, 5, 8}, {3, 6, 9}, // colunas
+            {1, 5, 9}, {3, 5, 7}           // diagonais
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,78 +95,39 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkGanhador() {
-        if (checarLinha(btn[1], btn[2], btn[3])) {
-            for (int x = 1; x < 10; x++) {
-                btn[x].setBackgroundColor(Color.RED);
-                btn[x].setEnabled(false); // trava o botão (fica visualmente desativado)
-            }
-            btn[1].setBackgroundColor(Color.GREEN);
-            btn[2].setBackgroundColor(Color.GREEN);
-            btn[3].setBackgroundColor(Color.GREEN);
-        }
-        if (checarLinha(btn[4], btn[5], btn[6])) {
-            for (int x = 1; x < 10; x++) {
-                btn[x].setBackgroundColor(Color.RED);
-                btn[x].setEnabled(false);
-            }
-            btn[4].setBackgroundColor(Color.GREEN);
-            btn[5].setBackgroundColor(Color.GREEN);
-            btn[6].setBackgroundColor(Color.GREEN);
-        }
-        if (checarLinha(btn[7], btn[8], btn[9])) {
-            for (int x = 1; x < 10; x++) {
-                btn[x].setBackgroundColor(Color.RED);
-                btn[x].setEnabled(false);
-            }
-            btn[7].setBackgroundColor(Color.GREEN);
-            btn[8].setBackgroundColor(Color.GREEN);
-            btn[9].setBackgroundColor(Color.GREEN);
-        }
-        if (checarLinha(btn[1], btn[4], btn[7])) {
-            for (int x = 1; x < 10; x++) {
-                btn[x].setBackgroundColor(Color.RED);
-                btn[x].setEnabled(false);
-            }
-            btn[1].setBackgroundColor(Color.GREEN);
-            btn[4].setBackgroundColor(Color.GREEN);
-            btn[7].setBackgroundColor(Color.GREEN);
-        }
-        if (checarLinha(btn[2], btn[5], btn[8])) {
-            for (int x = 1; x < 10; x++) {
-                btn[x].setBackgroundColor(Color.RED);
-                btn[x].setEnabled(false);
-            }
-            btn[2].setBackgroundColor(Color.GREEN);
-            btn[5].setBackgroundColor(Color.GREEN);
-            btn[8].setBackgroundColor(Color.GREEN);
-        }
-        if (checarLinha(btn[3], btn[6], btn[9])) {
-            for (int x = 1; x < 10; x++) {
-                btn[x].setBackgroundColor(Color.RED);
-                btn[x].setEnabled(false);
-            }
-            btn[3].setBackgroundColor(Color.GREEN);
-            btn[6].setBackgroundColor(Color.GREEN);
-            btn[9].setBackgroundColor(Color.GREEN);
-        }
-        if (checarLinha(btn[1], btn[5], btn[9])) {
-            for (int x = 1; x < 10; x++) {
-                btn[x].setBackgroundColor(Color.RED);
-                btn[x].setEnabled(false);
-            }
-            btn[1].setBackgroundColor(Color.GREEN);
-            btn[5].setBackgroundColor(Color.GREEN);
-            btn[9].setBackgroundColor(Color.GREEN);
-        }
-        if (checarLinha(btn[3], btn[5], btn[7])) {
-            for (int x = 1; x < 10; x++) {
-                btn[x].setBackgroundColor(Color.RED);
-                btn[x].setEnabled(false);
-            }
-            btn[3].setBackgroundColor(Color.GREEN);
-            btn[5].setBackgroundColor(Color.GREEN);
-            btn[7].setBackgroundColor(Color.GREEN);
-        }
+        for (int[] c : combinacoes) {
+            if (checarLinha(btn[c[0]], btn[c[1]], btn[c[2]])) {
+                destacarGanhador(c);
 
+                return;
+            }
+        }
+        checarEmpate();
+    }
+
+    private void destacarGanhador(int[] trio) {
+        for (int x = 1; x < 10; x++) {
+            btn[x].setBackgroundColor(Color.RED);
+            btn[x].setEnabled(false); // trava o botão (fica visualmente desativado)
+        }
+        for (int i : trio) {
+            btn[i].setBackgroundColor(Color.GREEN);
+        }
+    }
+
+    private void checarEmpate(){
+        boolean cheio = true;
+        for (int i = 1; i < 10; i++) {
+            if (btn[i].getText().toString().isEmpty()) {
+                cheio = false;
+                break;
+            }
+        }
+        if (cheio) {
+            for (int i = 1; i < 10; i++) {
+                btn[i].setBackgroundColor(Color.YELLOW);
+                btn[i].setEnabled(false);
+            }
+        }
     }
 }
